@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="renderer" content="webkit">
+    <title>修改管理员信息</title>
+    <link rel="stylesheet" href="css/pintuer.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <script src="js/jquery.js"></script>
+    <script src="js/pintuer.js"></script>
+    <script>
+        $(document).ready(function () {
+            $.get(
+                "/admin/getAdmin",
+                function (data) {
+                    $('#admin').html(JSON.parse(data).name);
+                }
+            );
+        });
+    </script>
+</head>
+<body>
+<div class="panel admin-panel">
+    <div class="panel-head"><strong><span class="icon-key"></span> 修改信息</strong></div>
+    <div class="body-content">
+        <div class="form-x">
+            <div class="form-group">
+                <div class="label">
+                    <label for="sitename">管理员帐号：</label>
+                </div>
+                <div class="field">
+                    <label id="admin" style="line-height:33px;">
+
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="label">
+                    <label for="sitename">职位：</label>
+                </div>
+                <div class="field">
+                    <input type="text" class="input w50" id="position" name="position" size="50" placeholder="请输入职位" data-validate="required:请输入职位" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="label">
+                    <label for="sitename">年级：</label>
+                </div>
+                <div class="field">
+                    <input type="text" class="input w50" id="grade" name="grade" size="50" placeholder="请输入年级" data-validate="required:请输入年级" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="label">
+                    <label for="sitename">简介：</label>
+                </div>
+                <div class="field">
+                    <input type="text" class="input w50" id="introduction" name="introduction" size="50" placeholder="请输入简介" data-validate="required:请输入简介" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="label">
+                    <label></label>
+                </div>
+                <div class="field">
+                    <button class="button bg-main icon-check-square-o" id="submits"> 提交</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/javascript">
+    /*修改信息*/
+    $('#submits').click(function () {
+            $.post(
+                "/admin/updateAdinfo",
+                {"position":$('#position').val(),"grade":$('#grade').val(),"introduction":$('#introduction').val()},
+                function (data) {
+                    if(data==1){
+                        alert("信息修改成功！");
+                        window.location.href="re-adminfo.html"
+                    }else{
+                        alert("修改失败！");
+                    }
+                }
+            );
+        }
+    );
+</script>
+</html>

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>修改活动</title>
+    <link rel="stylesheet" href="css/pintuer.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <script src="js/jquery.js"></script>
+    <script src="js/pintuer.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            /*$.get(
+                "/admin/getAdmin",
+                function (data) {
+                    if (JSON.parse(data).name!="admin"){
+                        alert("当前账号没有相关权限！")
+                        top.location="index.html";
+                    }
+                }
+            );*/
+            /*$.get(
+                "/bgCtype/getCtype",
+                function (data) {
+                    $.each(JSON.parse(data),function(i,obj) {
+                        $("#cType").append('<option value="' + obj.ctType + '">' + obj.ctType + '</option>');
+                    });
+                });
+            $.get(
+                "/bgDepart/getDepart",
+                function (data) {
+                    $.each(JSON.parse(data),function(i,obj) {
+                        $("#cDepartment").append('<option value="' + obj.deName + '">' + obj.deName + '</option>');
+                    });
+                });
+*/
+            var a=GetRequest();
+            $('#aId').val(a['aId']);
+            $('#cName').val(a['cName']);
+            $('#aTitle').val(a['aTitle']);
+            $('#aPerson').val(a['aPerson']);
+            $('#aPhone').val(a['aPhone']);
+            $('#aStime').val(a['aStime']);
+            $('#aEtime').val(a['aEtime']);
+            $('#aAdd').val(a['aAdd']);
+            $('#aText').val(a['aText']);
+            function GetRequest() {
+                var url = location.search; //获取url中"?"符后的字串
+                var theRequest = new Object();
+                if (url.indexOf("?") != -1) {
+                    var str = url.substr(1);
+                    strs = str.split("&");
+                    for (var i = 0; i < strs.length; i++) {
+                        theRequest[strs[i].split("=")[0]] = decodeURIComponent(strs[i].split("=")[1]);
+                    }
+                }
+                return theRequest;
+            }
+        });
+    </script>
+</head>
+<body ><!--onload="addDepart()"-->
+<div class="panel admin-panel">
+    <div class="panel-head"><strong class="icon-reorder">修改活动</strong></div>
+    <div class="panel admin-panel margin-top" id="add">
+        <div class="panel-head"><strong><span class="icon-pencil-square-o"></span>修改内容</strong></div>
+        <div class="body-content">
+            <div  class="form-x" >
+                <div class="form-group">
+                    <div class="label">
+                        <label>活动编号：</label>
+                    </div>
+                    <div class="field">
+                        <input type="text" class="input w50" id="aId" name="aId" readonly="true" />
+                        <div class="tips"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="label">
+                        <label>活动名称：</label>
+                    </div>
+                    <div class="field">
+                        <input type="text" class="input w50" id="aTitle" name="atitle" readonly="true"  />
+                        <div class="tips"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="label">
+                        <label>所属社团：</label>
+                    </div>
+                    <div class="field">
+                        <input type="text" class="input w50" id="cName" name="cName" readonly="true" />
+                        <div class="tips"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="label">
+                        <label>活动负责人：</label>
+                    </div>
+                    <div class="field">
+                        <input type="text" class="input w50" id="aPerson" name="aPerson" data-validate="required:请填写活动负责人"  />
+                        <div class="tips"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="label">
+                        <label>联系方式：</label>
+                    </div>
+                    <div class="field">
+                        <input type="text" class="input w50" id="aPhone" name="aPhone" data-validate="required:请填写负责人联系方式"  />
+                        <div class="tips"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="label">
+                        <label>活动开始时间：</label>
+                    </div>
+                    <div class="field">
+                        <input type="datetime-local" class="input w50" id="aStime" name="aTime" placeholder="例如：2019/01/01 8:00" data-validate="required:请填写活动时间"  />
+                        <div class="tips"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="label">
+                        <label>活动结束时间：</label>
+                    </div>
+                    <div class="field">
+                        <input type="datetime-local" class="input w50" id="aEtime" name="aTime" placeholder="例如：2019/01/01 12:00" data-validate="required:请填写活动时间"  />
+                        <div class="tips"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="label">
+                        <label>活动地点：</label>
+                    </div>
+                    <div class="field">
+                        <input type="text" class="input w50" id="aAdd" data-validate="required:请填写活动地点"  />
+                        <div class="tips"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="label">
+                        <label>活动介绍：</label>
+                    </div>
+                    <div class="field">
+                        <textarea type="text" id="aText" class="input"  style="height:80px;" value=""data-validate="required:请填写活动介绍"></textarea>
+                        <div class="tips"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="label">
+                        <label></label>
+                    </div>
+                    <div class="field">
+                        <button class="button bg-main icon-check-square-o" type="submit" id="cmunitySub"> 提交</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    $('#cmunitySub').click(function () {
+        var aStime1=new Date();
+        x = $("#aStime").val();
+        aStime1.setFullYear(parseInt(x.substring(0, 4)));
+        aStime1.setMonth(parseInt(x.substring(5, 7)) - 1);
+        aStime1.setDate(parseInt(x.substring(8, 10)));
+        aStime1.setHours(parseInt(x.substring(11, 13)));
+        aStime1.setMinutes(parseInt(x.substring(14, 16)));
+
+        var aEtime1=new Date();
+        x1 = $("#aEtime").val();
+        aEtime1.setFullYear(parseInt(x1.substring(0, 4)));
+        aEtime1.setMonth(parseInt(x1.substring(5, 7)) - 1);
+        aEtime1.setDate(parseInt(x1.substring(8, 10)));
+        aEtime1.setHours(parseInt(x1.substring(11, 13)));
+        aEtime1.setMinutes(parseInt(x1.substring(14, 16)));
+
+        var myform=new FormData();
+        myform.append('aId',$('#aId').val());
+        myform.append('aTitle',$('#aTitle').val());
+        myform.append('cName',$('#cName').val());
+        myform.append('aPerson',$('#aPerson').val());
+        myform.append('aPhone',$('#aPhone').val());
+        myform.append('aStime',aStime1);
+        myform.append('aEtime',aEtime1);
+        myform.append('aAdd',$('#aAdd').val());
+        myform.append('aText',$('#aText').val());
+            $.ajax({
+                url: "/bgActivity/reAct",
+                type: "POST",
+                data: myform,
+                cache:false,
+                processData:false,
+                contentType:false,
+                success:function (data) {
+                    if(JSON.parse(data)==="t"){
+                        alert("修改活动成功")
+                        window.location.href="list-activity.html";
+                    }else{
+                        alert("修改活动失败！");
+                    }
+                },
+                error:function (data) {
+                    alert("修改活动失败！");
+                }
+            });
+    });
+</script>
+</html>

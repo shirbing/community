@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>修改社团</title>
+    <link rel="stylesheet" href="css/pintuer.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <script src="js/jquery.js"></script>
+    <script src="js/pintuer.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $.get(
+                "/admin/getAdmin",
+                function (data) {
+                    if (JSON.parse(data).name!="admin"){
+                        alert("当前账号没有相关权限！")
+                        top.location="index.html";
+                    }
+                }
+            );
+            $.get(
+                "/bgCtype/getCtype",
+                function (data) {
+                    $.each(JSON.parse(data),function(i,obj) {
+                        $("#cType").append('<option value="' + obj.ctType + '">' + obj.ctType + '</option>');
+                    });
+                });
+            $.get(
+                "/bgDepart/getDepart",
+                function (data) {
+                    $.each(JSON.parse(data),function(i,obj) {
+                        $("#cDepartment").append('<option value="' + obj.deName + '">' + obj.deName + '</option>');
+                    });
+                });
+
+                var a=GetRequest();
+                $('#cId').val(a['cId']);
+                $('#cName').val(a['cName']);
+                $('#cPrincipal').val(a['cPrincipal']);
+                $('#cPhone').val(a['cPhone']);
+                $('#cIntroduction').val(a['cIntroduction']);
+
+            function GetRequest() {
+                var url = location.search; //获取url中"?"符后的字串
+                var theRequest = new Object();
+                if (url.indexOf("?") != -1) {
+                    var str = url.substr(1);
+                    strs = str.split("&");
+                    for (var i = 0; i < strs.length; i++) {
+                        theRequest[strs[i].split("=")[0]] = decodeURIComponent(strs[i].split("=")[1]);
+                    }
+                }
+                return theRequest;
+            }
+
+
+
+        });
+    </script>
+</head>
+<body ><!--onload="addDepart()"-->
+<div class="panel admin-panel">
+    <div class="panel-head"><strong class="icon-reorder">修改社团</strong></div>
+    <div class="panel admin-panel margin-top" id="add">
+        <div class="panel-head"><strong><span class="icon-pencil-square-o"></span>修改信息</strong></div>
+        <div class="body-content">
+            <div  class="form-x" >
+                <div class="form-group">
+                    <div class="label">
+                        <label>社团编号：</label>
+                    </div>
+                    <div class="field">
+                        <input type="text" class="input w50" id="cId" name="cId" readonly="true"  />
+                        <div class="tips"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="label">
+                        <label>社团名称：</label>
+                    </div>
+                    <div class="field">
+                        <input type="text" class="input w50" id="cName" name="cName" data-validate="required:请填写社团名称"  />
+                        <div class="tips"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="label">
+                        <label>所属单位：</label>
+                    </div>
+                    <div class="field">
+                        <select id="cDepartment" name="cDepartment" class="input w50">
+                            <option value="">请选择</option>
+                        </select>
+                        <div class="tips"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="label">
+                        <label>社团类型：</label>
+                    </div>
+                    <div class="field">
+                        <select id="cType" name="cType" class="input w50">
+                            <option value="">请选择</option>
+                        </select>
+                        <div class="tips"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="label">
+                        <label>负责人：</label>
+                    </div>
+                    <div class="field">
+                        <input type="text" class="input w50" id="cPrincipal" name="cPrincipal" data-validate="required:请填写社团负责人"  />
+                        <div class="tips"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="label">
+                        <label>联系方式：</label>
+                    </div>
+                    <div class="field">
+                        <input type="text" class="input w50" id="cPhone" name="cPhone" data-validate="required:请填写负责人联系方式"  />
+                        <div class="tips"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="label">
+                        <label>图片：</label>
+                    </div>
+                    <div class="field">
+                        <input type="file" id="cIcon" name="cIcon" class="button bg-blue margin-left"  value="+ 浏览上传"  style="float:left; width: 105px;"/>
+                        <div class="tipss">图片尺寸：1920*500</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="label">
+                        <label>社团简介：</label>
+                    </div>
+                    <div class="field">
+                        <textarea type="text" id="cIntroduction" class="input" name="cIntroduction" style="height:80px;" value=""data-validate="required:请填写社团简介"></textarea>
+                        <div class="tips"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="label">
+                        <label></label>
+                    </div>
+                    <div class="field">
+                        <button class="button bg-main icon-check-square-o" type="submit" id="cmunitySub"> 提交</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+
+    $('#cmunitySub').click(function () {
+        var myform=new FormData();
+        myform.append('cIcon1',$('#cIcon')[0].files[0]);
+        myform.append('cId',$('#cId').val());
+        myform.append('cName',$('#cName').val());
+        myform.append('cDepartment',$('#cDepartment').val());
+        myform.append('cType',$('#cType').val());
+        myform.append('cPrincipal',$('#cPrincipal').val());
+        myform.append('cPhone',$('#cPhone').val());
+        myform.append('cIntroduction',$('#cIntroduction').val());
+        $.ajax({
+            url: "/bgCmunity/updateCmunity",
+            type: "POST",
+            data: myform,
+            cache:false,
+            processData:false,
+            contentType:false,
+            success:function (data) {
+                if(data==1){
+                    alert("修改成功")
+                    /*location.reload();*/
+                    window.location.href="list-communtity.html";
+                }else if(data==0){
+                    alert("社团名称已存在！")
+                }else{
+                    alert("修改社团失败！");
+                }
+            },
+            error:function (data) {
+                alert("修改社团失败！");
+            }
+
+        });
+    });
+</script>
+</html>

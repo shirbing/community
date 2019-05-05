@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="renderer" content="webkit">
+    <title>社团类型列表</title>
+    <link rel="stylesheet" href="css/pintuer.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <script src="js/jquery.js"></script>
+    <script src="js/pintuer.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $.get(
+                "/admin/getAdmin",
+                function (data) {
+                    if (JSON.parse(data).name!="admin"){
+                        alert("当前账号没有相关权限！")
+                        top.location="index.html";
+                    }
+                }
+            );
+        });
+    </script>
+</head>
+<body onload="listdep()">
+<div class="panel admin-panel">
+    <div class="panel-head"><strong class="icon-reorder">社团类型列表</strong><div style="float: right;margin-right: 50px;padding:6px;border:solid #2fa0ec 1px;position:relative;top: -7px;"><strong class="icon-key"><a href="add-ctype.html" style="color: #00aaee">添加社团类型</a> </strong></div></div>
+
+    <table class="table table-hover text-center">
+        <tr>
+            <th width="10%">编号</th>
+            <th width="20%">社团类型</th>
+            <th width="20%">操作</th>
+        </tr>
+        <tbody name="list" class="tt" id="tt">
+
+        </tbody>
+    </table>
+</div>
+
+<script type="text/javascript">
+    function listdep() {
+        $.get("/bgCtype/getCtype",
+            function (data) {
+                ad(data);
+            }
+        );
+    }
+    function ad(data) {
+        $.each(JSON.parse(data),function(i,obj) {
+            $("#tt").append(
+                '<tr>' +
+                '<td>'+obj.ctId+'</td>' +
+                '<td>'+obj.ctType+'</td>' +
+                '<td> <div class="button-group"> <a class="button border-main"  href="re-type.html?ctType='+obj.ctType+'&ctId='+obj.ctId+'">'+
+                '<span class="icon-edit"></span>修改</a>'+
+                '<a class="button border-red" href="javascript:void(0)" onclick="deletetype(\''+obj.ctType+'\')">'+
+                '<span class="icon-trash-o"></span>删除</a>'+
+                '</div>' +
+                '</td>' +
+                '</tr>');
+        });
+    }
+    //删除院系操作
+    function deletetype(ctType) {
+        $.get("/bgCtype/deCtype",{"ctType":ctType},
+            function (data) {
+                if(JSON.parse(data)==="t"){
+                    alert("删除成功");
+                    location.reload();
+                }else if(JSON.parse(data)==="f"){
+                    alert("删除失败");
+                }else {
+                    alert("该社团类型有所属社团，不允许删除！");
+                }
+            }
+        );
+    }
+</script>
+</body>
+</html>

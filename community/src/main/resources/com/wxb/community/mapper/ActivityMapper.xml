@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wxb.community.mapper.ActivityMapper">
+  <resultMap id="BaseResultMap" type="com.wxb.community.domain.Activity">
+    <id column="a_id" jdbcType="INTEGER" property="aId" />
+    <result column="c_name" jdbcType="VARCHAR" property="cName" />
+    <result column="a_title" jdbcType="VARCHAR" property="aTitle" />
+    <result column="a_text" jdbcType="VARCHAR" property="aText" />
+    <result column="a_stime" jdbcType="TIMESTAMP" property="aStime" />
+    <result column="a_etime" jdbcType="TIMESTAMP" property="aEtime" />
+    <result column="a_add" jdbcType="VARCHAR" property="aAdd" />
+    <result column="a_person" jdbcType="VARCHAR" property="aPerson" />
+    <result column="a_phone" jdbcType="VARCHAR" property="aPhone" />
+    <result column="a_state" jdbcType="VARCHAR" property="aState" />
+    <result column="a_total" jdbcType="VARCHAR" property="aTotal" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    a_id, c_name, a_title, a_text, a_stime, a_etime, a_add, a_person, a_phone, a_state, 
+    a_total
+  </sql>
+  <select id="selectByPrimaryKey" resultType="Activity">
+    select
+    *
+    from activity order by a_id desc limit #{startIndex},#{endIndex}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from activity
+    where a_id = #{aId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.wxb.community.domain.Activity">
+    insert into activity (a_id, c_name, a_title, 
+      a_text, a_stime, a_etime, 
+      a_add, a_person, a_phone, 
+      a_state, a_total)
+    values (#{aId,jdbcType=INTEGER}, #{cName,jdbcType=VARCHAR}, #{aTitle,jdbcType=VARCHAR}, 
+      #{aText,jdbcType=VARCHAR}, #{aStime,jdbcType=TIMESTAMP}, #{aEtime,jdbcType=TIMESTAMP}, 
+      #{aAdd,jdbcType=VARCHAR}, #{aPerson,jdbcType=VARCHAR}, #{aPhone,jdbcType=VARCHAR}, 
+      #{aState,jdbcType=VARCHAR}, #{aTotal,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wxb.community.domain.Activity">
+    insert into activity
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="aId != null">
+        a_id,
+      </if>
+      <if test="cName != null">
+        c_name,
+      </if>
+      <if test="aTitle != null">
+        a_title,
+      </if>
+      <if test="aText != null">
+        a_text,
+      </if>
+      <if test="aStime != null">
+        a_stime,
+      </if>
+      <if test="aEtime != null">
+        a_etime,
+      </if>
+      <if test="aAdd != null">
+        a_add,
+      </if>
+      <if test="aPerson != null">
+        a_person,
+      </if>
+      <if test="aPhone != null">
+        a_phone,
+      </if>
+      <if test="aState != null">
+        a_state,
+      </if>
+      <if test="aTotal != null">
+        a_total,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="aId != null">
+        #{aId,jdbcType=INTEGER},
+      </if>
+      <if test="cName != null">
+        #{cName,jdbcType=VARCHAR},
+      </if>
+      <if test="aTitle != null">
+        #{aTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="aText != null">
+        #{aText,jdbcType=VARCHAR},
+      </if>
+      <if test="aStime != null">
+        #{aStime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aEtime != null">
+        #{aEtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aAdd != null">
+        #{aAdd,jdbcType=VARCHAR},
+      </if>
+      <if test="aPerson != null">
+        #{aPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="aPhone != null">
+        #{aPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="aState != null">
+        #{aState,jdbcType=VARCHAR},
+      </if>
+      <if test="aTotal != null">
+        #{aTotal,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wxb.community.domain.Activity">
+    update activity
+    <set>
+      <if test="cName != null">
+        c_name = #{cName,jdbcType=VARCHAR},
+      </if>
+      <if test="aTitle != null">
+        a_title = #{aTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="aText != null">
+        a_text = #{aText,jdbcType=VARCHAR},
+      </if>
+      <if test="aStime != null">
+        a_stime = #{aStime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aEtime != null">
+        a_etime = #{aEtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="aAdd != null">
+        a_add = #{aAdd,jdbcType=VARCHAR},
+      </if>
+      <if test="aPerson != null">
+        a_person = #{aPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="aPhone != null">
+        a_phone = #{aPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="aState != null">
+        a_state = #{aState,jdbcType=VARCHAR},
+      </if>
+      <if test="aTotal != null">
+        a_total = #{aTotal,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where a_id = #{aId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wxb.community.domain.Activity">
+    update activity
+    set c_name = #{cName,jdbcType=VARCHAR},
+      a_title = #{aTitle,jdbcType=VARCHAR},
+      a_text = #{aText,jdbcType=VARCHAR},
+      a_stime = #{aStime,jdbcType=TIMESTAMP},
+      a_etime = #{aEtime,jdbcType=TIMESTAMP},
+      a_add = #{aAdd,jdbcType=VARCHAR},
+      a_person = #{aPerson,jdbcType=VARCHAR},
+      a_phone = #{aPhone,jdbcType=VARCHAR},
+      a_state = #{aState,jdbcType=VARCHAR},
+      a_total = #{aTotal,jdbcType=VARCHAR}
+    where a_id = #{aId,jdbcType=INTEGER}
+  </update>
+</mapper>

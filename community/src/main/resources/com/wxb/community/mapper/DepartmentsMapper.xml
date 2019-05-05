@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wxb.community.mapper.DepartmentsMapper">
+  <resultMap id="BaseResultMap" type="com.wxb.community.domain.Departments">
+    <result column="de_id" jdbcType="INTEGER" property="deId" />
+    <result column="de_name" jdbcType="VARCHAR" property="deName" />
+  </resultMap>
+  <insert id="insert" parameterType="com.wxb.community.domain.Departments">
+    insert into departments (de_name)
+    values #{deName,jdbcType=VARCHAR}
+  </insert>
+  <select id="getDepart"  resultType="Departments">
+    select * from departments
+  </select>
+  <insert id="insertSelective" parameterType="com.wxb.community.domain.Departments">
+    insert into departments
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="deId != null">
+        de_id,
+      </if>
+      <if test="deName != null">
+        de_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="deId != null">
+        #{deId,jdbcType=INTEGER},
+      </if>
+      <if test="deName != null">
+        #{deName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <delete id="deleteByPrimaryKey" parameterType="com.wxb.community.domain.Departments">
+    delete from departments
+    where de_name = #{deName,jdbcType=VARCHAR}
+  </delete>
+    <update id="updateByPrimaryKeySelective" parameterType="com.wxb.community.domain.Departments">
+        update departments
+        <set>
+            <if test="deName != null">
+                de_name = #{deName,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where de_id = #{deId,jdbcType=INTEGER}
+    </update>
+    <!--院系名称是否存在-->
+    <select id="selectByName" parameterType="Departments" resultType="Departments">
+        select
+        *
+        from departments
+        where de_name = #{deName,jdbcType=VARCHAR}
+    </select>
+</mapper>

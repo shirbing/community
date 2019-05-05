@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>修改学生信息</title>
+    <link rel="stylesheet" href="css/pintuer.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <script src="js/jquery.js"></script>
+    <script src="js/pintuer.js"></script>
+    <script>
+        $(document).ready(function () {
+            $.get(
+                "/fwStu/getStu",
+                function (data) {
+                    $('#admin').html(JSON.parse(data).sName);
+                    $('#sNickname').val(JSON.parse(data).sNickname);
+                    $('#sName').val(JSON.parse(data).sName);
+                    $('#sStuid').val(JSON.parse(data).sStuid);
+                    $('#sAge').val(JSON.parse(data).sAge);
+                    $('#sSex').val(JSON.parse(data).sSex);
+                    $('#sPhone').val(JSON.parse(data).sPhone);
+                    $('#sPhone').val(JSON.parse(data).sPhone);
+                }
+            );
+        });
+    </script>
+</head>
+
+<body>
+<div class="panel admin-panel margin-top" id="add" >
+    <div class="panel-head"><strong><span class="icon-pencil-square-o"></span> 修改学生信息</strong></div>
+    <div class="body-content">
+        <div  class="form-x" >
+            <div class="form-group">
+                <div class="label">
+                    <label>昵称：</label>
+                </div>
+                <div class="field">
+                    <input type="text" class="input w50" value="" id="sNickname" data-validate="required:请输入昵称" />
+                    <div class="tips"></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="label">
+                    <label>头像：</label>
+                </div>
+                <div class="field">
+                    <input type="file" name="imgsss" class="button bg-blue margin-left" id="sIcon" value="+ 浏览上传"  style="float:left;width: 105px;">
+                    <div class="tipss">图片尺寸：500*500</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="label">
+                    <label>姓名：</label>
+                </div>
+                <div class="field">
+                    <input type="text" class="input w50" id="sName" value="" data-validate="required:请输入姓名"   />
+                    <div class="tips"></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="label">
+                    <label>学号：</label>
+                </div>
+                <div class="field">
+                    <input type="text" class="input w50" id="sStuid" value="" readonly="true"  data-validate="required:请输入学号"  />
+                    <div class="tips"></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="label">
+                    <label>年龄：</label>
+                </div>
+                <div class="field">
+                    <input type="text" class="input w50" id="sAge" value="" data-validate="required:请输入年龄"  />
+                    <div class="tips"></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="label">
+                    <label>性别：</label>
+                </div>
+                <div class="field">
+                    <input type="text" class="input w50" id="sSex" value="" data-validate="required:请输入性别"  />
+                    <div class="tips"></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="label">
+                    <label>专业年级：</label>
+                </div>
+                <div class="field">
+                    <select  id="sGrade" class="input w50">
+                        <option value="无">请选择</option>
+                        <option value="大一">大一</option>
+                        <option value="大二">大二</option>
+                        <option value="大三">大三</option>
+                        <option value="大四">大四</option>
+                    </select><div class="tips"></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="label">
+                    <label>联系方式：</label>
+                </div>
+                <div class="field">
+                    <input type="text" class="input w50" id="sPhone" value="" data-validate="required:请输入联系方式"  />
+                    <div class="tips"></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="label">
+                    <label></label>
+                </div>
+                <div class="field">
+                    <button class="button bg-main icon-check-square-o" type="submit" id="cmunityStu"> 提交</button>
+                </div>
+            </div>
+            <div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    $('#cmunityStu').click(function () {
+        var myform=new FormData();
+        myform.append('sIcon1',$('#sIcon')[0].files[0]);
+        myform.append('sName',$('#sName').val());
+        myform.append('sNickname',$('#sNickname').val());
+        myform.append('sSex',$('#sSex').val());
+        myform.append('sAge',$('#sAge').val());
+        myform.append('sGrade',$('#sGrade').val());
+        myform.append('sPhone',$('#sPhone').val());
+        myform.append('sStuid',$('#sStuid').val());
+        if ($('#sGrade').val()=="无"){
+            alert("请确定数据完整！");
+        }else{
+            $.ajax({
+                url: "/fwStu/updateStu",
+                type: "POST",
+                data: myform,
+                cache:false,
+                processData:false,
+                contentType:false,
+                success:function (data) {
+                    if(JSON.parse(data)==="t"){
+                        alert("修改成功")
+                        top.location="index.html";
+                    }else if(JSON.parse(data)==="f"){
+                        alert("修改失败！")
+                    }
+                },
+                error:function (data) {
+                    alert("修改失败！");
+                }
+
+            });
+        }
+    });
+</script>
+</html>

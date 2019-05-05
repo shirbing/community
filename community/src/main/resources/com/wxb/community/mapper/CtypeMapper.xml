@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wxb.community.mapper.CtypeMapper">
+  <resultMap id="BaseResultMap" type="com.wxb.community.domain.Ctype">
+    <id column="ct_id" jdbcType="INTEGER" property="ctId" />
+    <result column="ct_type" jdbcType="VARCHAR" property="ctType" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ct_id, ct_type
+  </sql>
+  <select id="select"  resultType="cType">
+    select * from ctype
+  </select>
+  <select id="selectByName" parameterType="cType" resultType="cType">
+    select
+    *
+    from ctype
+    where ct_type = #{ctType,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from ctype
+    where ct_id = #{ctId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteBytype" parameterType="com.wxb.community.domain.Ctype">
+    delete from ctype
+    where ct_type = #{ctType,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from ctype
+    where ct_id = #{ctId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.wxb.community.domain.Ctype">
+    insert into ctype (ct_id, ct_type)
+    values (#{ctId,jdbcType=INTEGER}, #{ctType,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wxb.community.domain.Ctype">
+    insert into ctype
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="ctId != null">
+        ct_id,
+      </if>
+      <if test="ctType != null">
+        ct_type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="ctId != null">
+        #{ctId,jdbcType=INTEGER},
+      </if>
+      <if test="ctType != null">
+        #{ctType,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wxb.community.domain.Ctype">
+    update ctype
+    <set>
+      <if test="ctType != null">
+        ct_type = #{ctType,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ct_id = #{ctId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wxb.community.domain.Ctype">
+    update ctype
+    set ct_type = #{ctType,jdbcType=VARCHAR}
+    where ct_id = #{ctId,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="renderer" content="webkit">
+    <title>管理员列表</title>
+    <link rel="stylesheet" href="css/pintuer.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <script src="js/jquery.js"></script>
+    <script src="js/pintuer.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $.get(
+                "/admin/getAdmin",
+                function (data) {
+                    if (JSON.parse(data).name!="admin"){
+                        alert("当前账号没有相关权限！")
+                        top.location="index.html";
+                    }else{
+                        listadmin()
+                    }
+                }
+            );
+
+        })
+    </script>
+</head>
+<body>
+<div class="panel admin-panel">
+    <div class="panel-head"><strong class="icon-reorder">管理员列表</strong></div>
+    <table class="table table-hover text-center">
+        <tr>
+            <th width="10%">序号</th>
+            <th width="10%">学号</th>
+            <th width="10%">姓名</th>
+            <th width="10%">职位</th>
+            <th width="10%">专业年级</th>
+            <th width="10%">是否禁用</th>
+            <th width="20%">简介</th>
+            <th width="20%">操作</th>
+        </tr>
+        <tbody name="list" class="tt" id="tt">
+
+        </tbody>
+        <tr>
+            <td colspan="8"><div class=""><button class="" onclick="previousPage()">上一页</button>&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button class="next" onclick="nextPage()">下一页</button></div></td>
+        </tr>
+    </table>
+</div>
+
+<script type="text/javascript">
+
+    var currentpage=1;
+    function listadmin() {
+        $.get("/admin/listAdmin", {"currentpage": currentpage},
+            function (data) {
+                console.log(data);
+                if(data.length<3){
+                    addAtt();
+                }else{
+                    removeAtt();
+                }
+                remove();
+                ad(data);
+            }
+        );
+    }
+    function ad(data) {
+        $.each(JSON.parse(data),function(i,obj) {
+            if (obj.id==1){
+                $("#tt").append(
+                    '<tr>' +
+                    '<td>'+obj.id+'</td>' +
+                    '<td>'+obj.stuId+'</td>' +
+                    '<td>'+obj.name+'</td>' +
+                    '<td>'+obj.position+'</td>' +
+                    '<td>'+obj.grade+'</td>' +
+                    '<td>'+obj.state+'</td>' +
+                    '<td>'+obj.introduction+'</td>' +
+                    '</tr>');
+
+            } else if(obj.state=="是"){
+                $("#tt").append(
+                    '<tr>' +
+                    '<td>'+obj.id+'</td>' +
+                    '<td>'+obj.stuId+'</td>' +
+                    '<td>'+obj.name+'</td>' +
+                    '<td>'+obj.position+'</td>' +
+                    '<td>'+obj.grade+'</td>' +
+                    '<td>'+obj.state+'</td>' +
+                    '<td>'+obj.introduction+'</td>' +
+                    '<td> <div class="button-group"> <a class="button border-main"  href="javascript:void(0)" onclick="repwd('+obj.stuId+')">'+
+                    '<span class="icon-edit"></span>重置密码</a>'+
+                    '<a class="button border-red" href="javascript:void(0)" onclick="deleteAdmin('+obj.stuId+')">'+
+                    '<span class="icon-trash-o"></span>禁用</a>'+
+                    '</div>' +
+                    '</td>' +
+                    '</tr>');
+            }else{
+                $("#tt").append(
+                    '<tr>' +
+                    '<td>'+obj.id+'</td>' +
+                    '<td>'+obj.stuId+'</td>' +
+                    '<td>'+obj.name+'</td>' +
+                    '<td>'+obj.position+'</td>' +
+                    '<td>'+obj.grade+'</td>' +
+                    '<td>'+obj.state+'</td>' +
+                    '<td>'+obj.introduction+'</td>' +
+                    '<td> <div class="button-group"><a class="button border-main"  href="javascript:void(0)" onclick="repwd('+obj.stuId+')">'+
+                    '<span class="icon-edit"></span>重置密码</a>'+
+                    '<a class="button border-red" href="javascript:void(0)" onclick="upAdmin('+obj.stuId+')">'+
+                    '<span class="icon-trash-o"></span>启用</a>'+
+                    '</div>' +
+                    '</td>' +
+                    '</tr>');
+            }
+
+
+        });
+    }
+    //删除当前已经存在的元素
+    function remove(){
+        var tb=document.getElementsByClassName("tt")[0];
+        var leng=tb.rows.length;
+        for (var i= 0; i <leng;i++) {
+            tb.deleteRow(0);
+        }
+    }
+    //下一页
+    function nextPage(){
+        //让当前页数+1；
+        currentpage++;
+        //请求网络
+        listadmin();
+    }
+    //上一页
+    function previousPage(){
+        //1判断currentPage==1;
+        if(currentpage===1)return;
+        //currentPage-1;
+        currentpage--;
+        //网络请求
+        listadmin();
+    }
+    //添加
+    function addAtt(){
+        var btn=document.getElementsByClassName("next")[0];
+        btn.setAttribute("disabled", "disabled");
+    }
+    //移除
+    function removeAtt() {
+        var btn = document.getElementsByClassName("next")[0];
+        btn.removeAttribute("disabled");
+    }
+    //禁用管理员操作
+    function deleteAdmin(stuId) {
+        $.get("/admin/deleteAdmin",{"stuId":stuId},
+            function (data) {
+                console.log(data);
+                if(data==="t"){
+                    alert("禁用失败");
+                }else{
+                    window.location.href="list-adm.html";
+                }
+            }
+        );
+    }
+    //启用管理员操作
+    function upAdmin(stuId) {
+        $.get("/admin/upAdmin",{"stuId":stuId},
+            function (data) {
+                console.log(data);
+                if(data==="t"){
+                    alert("启用失败");
+                }else{
+                    window.location.href="list-adm.html";
+                }
+            }
+        );
+    }
+    //重置密码
+    function repwd(stuId) {
+        $.get("/admin/repwd",{"stuId":stuId},
+            function (data) {
+                console.log(data);
+                if(data==="t"){
+                    alert("密码重置失败");
+                }else{
+                    alert("密码重置成功");
+                }
+            }
+        );
+    }
+</script>
+
+
+</body>
+</html>

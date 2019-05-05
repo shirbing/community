@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="renderer" content="webkit">
+    <title>社团活动列表</title>
+    <link rel="stylesheet" href="css/pintuer.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <script src="js/jquery.js"></script>
+    <script src="js/pintuer.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            /*$.get(
+                "/bgCmunity/listCmunity",
+                function (data) {
+                    $.each(JSON.parse(data),function(i,obj) {
+                        $("#cType").append('<option value="' + obj.cName + '">' + obj.cName + '</option>');
+                    });
+                });*/
+            listadmin();
+        })
+    </script>
+</head>
+<body>
+<div class="panel admin-panel">
+    <div class="panel-head"><strong class="icon-reorder">社团活动列表</strong></div>
+    <!--<div class="padding border-bottom">
+        <ul class="search" style="padding-left:10px;">
+            <li>
+                <select id="cType" name="cType" onchange="changesearch()"  style="width:76px;margin-left: 200px; height:30px;display:inline-block;">
+                    <option value="">社团名称</option>
+
+                </select>
+                &nbsp;&nbsp;&nbsp;
+                <select id="cDepartment" name="cDepartment" onchange="changesearch()" style=" width:76px;margin-left: 30px; height:30px;display:inline-block">
+                    <option value="" >活动状态</option>
+                    <option value="未开始" >未开始</option>
+                    <option value="名额已满">报名截止</option>
+                </select>
+            </li>
+        </ul>
+    </div>-->
+    <table class="table table-hover text-center">
+        <tr>
+            <th width="4%">序号</th>
+            <th width="12%">活动名称</th>
+            <th width="10%">所属社团</th>
+            <th width="10%">活动时间</th>
+            <th width="10%">活动地点</th>
+            <th width="8%">活动负责人</th>
+            <th width="8%">联系方式</th>
+            <th width="10%">活动状态</th>
+            <!--<th width="6%">人数(人)</th>-->
+            <th width="16%">操作</th>
+        </tr>
+        <tbody name="list" class="tt" id="tt">
+
+        </tbody>
+        <tr>
+            <td colspan="8"><div class=""><button class="" onclick="previousPage()">上一页</button>&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button class="next" onclick="nextPage()">下一页</button></div></td>
+        </tr>
+    </table>
+</div>
+
+<script type="text/javascript">
+    var currentpage=1;
+    function listadmin() {
+        $.get("/bgActivity/getActivity", {"currentpage": currentpage},
+            function (data) {
+                if(data.length<5){
+                    addAtt();
+                }else{
+                    removeAtt();
+                }
+                remove();
+                ad1(data);
+            }
+        );
+    }
+    function ad1(data) {
+        $.each(JSON.parse(data),function(i,obj) {
+            if(obj.aState!="停止报名"){
+                $("#tt").append(
+                    '<tr>' +
+                    '<td>'+((currentpage-1)*5+i+1)+'</td>' +
+                    '<td>'+obj.aTitle+'</td>' +
+                    '<td>'+obj.cName+'</td>' +
+                    '<td>'+new Date(parseInt(obj.aStime )).toLocaleString().replace(/:\d{1,2}$/,' ') + '</td>' +
+                    '<td>'+obj.aAdd+'</td>' +
+                    '<td>'+obj.aPerson+'</td>' +
+                    '<td>'+obj.aPhone+'</td>' +
+                    '<td>'+obj.aState+'</td>' +
+                    /*'<td>'+obj.aText+'</td>' +*/
+                   /* '<td>'+obj.aTotal+'</td>' +*/
+                    '<td> <div class="button-group"> <a class="button border-main"  href="re-actinfo.html?cName='+obj.cName+'&aId='+obj.aId+'&aTitle='+obj.aTitle+'&aText='+obj.aText+'&aStime='+obj.aStime+'&aEtime='+obj.aEtime+'&aAdd='+obj.aAdd+'&aPerson='+obj.aPerson+'&aPhone='+obj.aPhone+'">'+
+                    '<span class="icon-edit"></span>修改</a>'+
+                    '<a class="button border-red" href="javascript:void(0)" onclick="stop1(\''+obj.aId+'\')">'+
+                    '<span class="icon-edit"></span>停止报名</a>'+
+                    '</div>' +
+                    '</td>' +
+                    '</tr>');
+            }else{
+                $("#tt").append(
+                    '<tr>' +
+                    '<td>'+((currentpage-1)*5+i+1)+'</td>' +
+                    '<td>'+obj.aTitle+'</td>' +
+                    '<td>'+obj.cName+'</td>' +
+                    '<td>'+new Date(parseInt(obj.aStime )).toLocaleString().replace(/:\d{1,2}$/,' ') + '</td>' +
+                    '<td>'+obj.aAdd+'</td>' +
+                    '<td>'+obj.aPerson+'</td>' +
+                    '<td>'+obj.aPhone+'</td>' +
+                    '<td>'+obj.aState+'</td>' +
+                    /*'<td>'+obj.aText+'</td>' +*/
+                    /*'<td>'+obj.aTotal+'</td>' +*/
+                    '<td> <div class="button-group"> <a class="button border-main"  href="javascript:void(0)" onclick="msg1()">'+
+                    '<span class="icon-edit"></span>修改</a>'+
+                    '<a class="button border-red" href="javascript:void(0)">'+
+                    '<span class="icon-edit"></span>停止报名</a>'+
+                    '</div>' +
+                    '</td>' +
+                    '</tr>');
+            }
+
+        });
+    }
+    //提示
+    function msg1() {
+        alert("停止报名的活动不允许修改！");
+    }
+    //删除当前已经存在的元素
+    function remove(){
+        var tb=document.getElementsByClassName("tt")[0];
+        var leng=tb.rows.length;
+        for (var i= 0; i <leng;i++) {
+            tb.deleteRow(0);
+        }
+    }
+    //下一页
+    function nextPage(){
+        //让当前页数+1；
+        currentpage++;
+        //请求网络
+        if($('#cDepartment').val()==""&&$('#cType').val()=="") {
+            listadmin();
+        }else {
+            changesearch();
+        }
+    }
+    //上一页
+    function previousPage(){
+        //1判断currentPage==1;
+        if(currentpage===1)return;
+        //currentPage-1;
+        currentpage--;
+        //网络请求
+        //请求网络
+        if($('#cDepartment').val()==""&&$('#cType').val()=="") {
+            listadmin();
+        }else {
+            changesearch();
+        }
+    }
+    //添加
+    function addAtt(){
+        var btn=document.getElementsByClassName("next")[0];
+        btn.setAttribute("disabled", "disabled");
+    }
+    //移除
+    function removeAtt() {
+        var btn = document.getElementsByClassName("next")[0];
+        btn.removeAttribute("disabled");
+    }
+    //停止报名操作
+    function stop1(aId) {
+        $.get(
+            "/bgActivity/stopAct",{"aId":aId},
+            function (data) {
+                if(JSON.parse(data)==="t"){
+                    alert("操作成功");
+                    location.reload();
+                }else{
+                    alert("操作失败");
+                }
+            }
+        );
+
+    }
+
+/*    //条件查询
+    function changesearch() {
+        if($('#cDepartment').val()==""&&$('#cType').val()=="") {
+            window.location.href="list-communtity.html";
+        }else{
+            $.get(
+                "/bgCmunity/searchCmunity",
+                {"currentpage": currentpage,"cDepartment":$('#cDepartment').val(),"cType":$('#cType').val()},
+                function (data) {
+                    console.log(data);
+                    if(data.length<3){
+                        addAtt();
+                    }else{
+                        removeAtt();
+                    }
+                    remove();
+                    ad(data);
+                }
+            );
+        }
+    }*/
+</script>
+</body>
+</html>

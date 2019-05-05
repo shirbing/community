@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>注册管理员</title>
+    <link rel="stylesheet" href="css/pintuer.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <script src="js/jquery.js"></script>
+    <script src="js/pintuer.js"></script>
+</head>
+
+<body>
+<div class="panel admin-panel margin-top" id="add" >
+    <div class="panel-head"><strong><span class="icon-pencil-square-o"></span> 注册学生账号</strong></div>
+    <div class="body-content">
+        <div  class="form-x" >
+            <div class="form-group">
+                <div class="label">
+                    <label>昵称：</label>
+                </div>
+                <div class="field">
+                    <input type="text" class="input w50" value="" id="sNickname" data-validate="required:请输入昵称" />
+                    <div class="tips"></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="label">
+                    <label>头像：</label>
+                </div>
+                <div class="field">
+                    <input type="file" name="imgsss" class="button bg-blue margin-left" id="sIcon" value="+ 浏览上传"  style="float:left;width: 105px;">
+                    <div class="tipss">图片尺寸：500*500</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="label">
+                    <label>姓名：</label>
+                </div>
+                <div class="field">
+                    <input type="text" class="input w50" id="sName" value="" data-validate="required:请输入姓名"  />
+                    <div class="tips"></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="label">
+                    <label>学号：</label>
+                </div>
+                <div class="field">
+                    <input type="text" class="input w50" id="sStuid" value="" data-validate="required:请输入学号"  />
+                    <div class="tips"></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="label">
+                    <label>年龄：</label>
+                </div>
+                <div class="field">
+                    <input type="text" class="input w50" id="sAge" value="" data-validate="required:请输入年龄"  />
+                    <div class="tips"></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="label">
+                    <label>性别：</label>
+                </div>
+                <div class="field">
+                    <input type="text" class="input w50" id="sSex" value="" data-validate="required:请输入性别"  />
+                    <div class="tips"></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="label">
+                    <label>专业年级：</label>
+                </div>
+                <div class="field">
+                    <select  id="sGrade" class="input w50">
+                        <option value="无">请选择</option>
+                        <option value="大一">大一</option>
+                        <option value="大二">大二</option>
+                        <option value="大三">大三</option>
+                        <option value="大四">大四</option>
+                    </select><div class="tips"></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="label">
+                    <label>联系方式：</label>
+                </div>
+                <div class="field">
+                    <input type="text" class="input w50" id="sPhone" value="" data-validate="required:请输入联系方式"  />
+                    <div class="tips"></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="label">
+                    <label>密保问题：</label>
+                </div>
+                <div class="field">
+                    <select  id="sQuest1" class="input w50">
+                        <option value="无">请选择</option>
+                        <option value="影响您最深的人是谁?">影响您最深的人是谁？</option>
+                        <option value="您小学班主任是谁?">您小学班主任是谁？</option>
+                        <option value="您中学班主任是谁?">您中学班主任是谁？</option>
+                        <option value="您小时候最好的朋友是谁?">您小时候最好的朋友是谁？</option>
+                    </select>
+                    <div class="tips"></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="label">
+                    <label>问题答案：</label>
+                </div>
+                <div class="field">
+                    <div class="tips">
+                        <input type="text" class="input w50" id="ans" value="" data-validate="required:请输入答案"  />
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="label">
+                    <label></label>
+                </div>
+                <div class="field">
+                    <button class="button bg-main icon-check-square-o" type="submit" id="cmunityStu"> 提交</button>
+                </div>
+            </div>
+        <div>
+    </div>
+    </div>
+    </div>
+</div>
+</body>
+<script>
+    $('#cmunityStu').click(function () {
+        var s1=$('#sQuest1').val();
+        var s2=$('#ans').val();
+        var s3=s1+s2;
+        var myform=new FormData();
+        myform.append('sIcon1',$('#sIcon')[0].files[0]);
+        myform.append('sName',$('#sName').val());
+        myform.append('sNickname',$('#sNickname').val());
+        myform.append('sSex',$('#sSex').val());
+        myform.append('sAge',$('#sAge').val());
+        myform.append('sGrade',$('#sGrade').val());
+        myform.append('sPhone',$('#sPhone').val());
+        myform.append('sStuid',$('#sStuid').val());
+        myform.append('sQuest1',s3);
+        if ($('#sGrade').val()=="无"){
+            alert("请确定数据完整！");
+        }else{
+            $.ajax({
+                url: "/fwStu/addStu",
+                type: "POST",
+                data: myform,
+                cache:false,
+                processData:false,
+                contentType:false,
+                success:function (data) {
+                    if(JSON.parse(data)==="t"){
+                        alert("添加成功")
+                        /*window.location.href="list-communtity.html";*/
+                    }else if(JSON.parse(data)==="ff"){
+                        alert("学号已存在！")
+                    }else{
+                        alert("添加失败！");
+                    }
+                },
+                error:function (data) {
+                    alert("添加失败1！");
+                }
+
+            });
+        }
+    });
+</script>
+</html>
